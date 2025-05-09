@@ -4,23 +4,88 @@
   <meta charset="UTF-8">
   <title>Redirecting...</title>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: #ffffff;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
     .loader {
       width: 48px;
       height: 48px;
-      border: 5px solid #FFF;
+      border: 5px solid rgba(255, 255, 255, 0.3);
       border-bottom-color: #FF3D00;
       border-radius: 50%;
       display: inline-block;
       box-sizing: border-box;
       animation: rotation 1s linear infinite;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      margin-bottom: 1rem;
     }
+
+    .progress-container {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin: 1rem auto;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #FF3D00;
+      border-radius: 2px;
+      animation: progress 1s linear forwards;
+    }
+
+    .status-text {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 1rem;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.5s;
+    }
+
     @keyframes rotation {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes progress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
   </style>
   <script>
@@ -144,10 +209,41 @@
           window.location.replace(`https://szliyi.com/${hash}`);
         }
       }, 1000); // Reduced from 2000ms to 1000ms
+
+      const statusTexts = [
+        "Verifying connection...",
+        "Checking security...",
+        "Preparing redirect...",
+        "Almost there..."
+      ];
+      
+      let currentStatus = 0;
+      const statusElement = document.querySelector('.status-text');
+      
+      const updateStatus = () => {
+        if (currentStatus < statusTexts.length) {
+          statusElement.textContent = statusTexts[currentStatus];
+          currentStatus++;
+        }
+      };
+
+      // Update status every 250ms
+      const statusInterval = setInterval(updateStatus, 250);
+      
+      // Clear interval after 1 second (same as redirect timeout)
+      setTimeout(() => {
+        clearInterval(statusInterval);
+      }, 1000);
     });
   </script>
 </head>
 <body>
-  <div class="loader"></div>
+  <div class="container pulse">
+    <div class="loader"></div>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+    <div class="status-text"></div>
+  </div>
 </body>
 </html>
