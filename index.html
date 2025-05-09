@@ -153,17 +153,112 @@
         isBot = true;
       }
 
-      // Mouse movement detection with debounce
+      // Mouse movement detection with enhanced accuracy
       let moved = false;
       let moveTimeout;
-      window.addEventListener("mousemove", () => {
-        moved = true;
+      let moveCount = 0;
+      let lastMoveTime = Date.now();
+      let moveCoordinates = [];
+      const requiredMoves = 3; // Number of moves required to consider it human
+      const moveTimeWindow = 2000; // Time window to detect moves (2 seconds)
+
+      const isNaturalMovement = (coordinates) => {
+        if (coordinates.length < 3) return false;
+        
+        // Calculate average speed and direction changes
+        let totalDistance = 0;
+        let directionChanges = 0;
+        
+        for (let i = 1; i < coordinates.length; i++) {
+          const prev = coordinates[i - 1];
+          const curr = coordinates[i];
+          
+          // Calculate distance
+          const distance = Math.sqrt(
+            Math.pow(curr.x - prev.x, 2) + 
+            Math.pow(curr.y - prev.y, 2)
+          );
+          totalDistance += distance;
+          
+          // Calculate direction change
+          if (i > 1) {
+            const prevDir = Math.atan2(
+              coordinates[i-1].y - coordinates[i-2].y,
+              coordinates[i-1].x - coordinates[i-2].x
+            );
+            const currDir = Math.atan2(
+              curr.y - coordinates[i-1].y,
+              curr.x - coordinates[i-1].x
+            );
+            const angleDiff = Math.abs(currDir - prevDir);
+            if (angleDiff > 0.1) { // Threshold for direction change
+              directionChanges++;
+            }
+          }
+        }
+        
+        // Check if movement patterns look natural
+        const avgSpeed = totalDistance / coordinates.length;
+        const avgDirectionChanges = directionChanges / (coordinates.length - 2);
+        
+        return avgSpeed > 5 && // Minimum speed threshold
+               avgDirectionChanges > 0.2 && // Minimum direction changes
+               avgDirectionChanges < 0.8; // Maximum direction changes
+      };
+
+      const handleMovement = (x, y) => {
+        const currentTime = Date.now();
+        
+        // Only consider moves within the time window
+        if (currentTime - lastMoveTime > moveTimeWindow) {
+          moveCount = 0;
+          moveCoordinates = [];
+        }
+        
+        moveCoordinates.push({ x, y, time: currentTime });
+        lastMoveTime = currentTime;
+        moveCount++;
+        
+        // Check if we have enough moves and they look natural
+        if (moveCount >= requiredMoves && isNaturalMovement(moveCoordinates)) {
+          moved = true;
+          clearTimeout(moveTimeout);
+        }
+        
+        // Reset after timeout
         clearTimeout(moveTimeout);
         moveTimeout = setTimeout(() => {
-          // Reset after 5 seconds of no movement
-          moved = false;
-        }, 5000);
+          moveCount = 0;
+          moveCoordinates = [];
+        }, moveTimeWindow);
+      };
+
+      // Mouse movement detection
+      window.addEventListener("mousemove", (e) => {
+        handleMovement(e.clientX, e.clientY);
       });
+
+      // Touch movement detection
+      window.addEventListener("touchmove", (e) => {
+        e.preventDefault(); // Prevent scrolling
+        const touch = e.touches[0];
+        handleMovement(touch.clientX, touch.clientY);
+      }, { passive: false });
+
+      // Additional human behavior checks
+      const checkHumanBehavior = () => {
+        // Check for random mouse movements
+        const randomMove = Math.random() > 0.5;
+        if (randomMove) {
+          handleMovement(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight
+          );
+        }
+      };
+
+      // Periodically check for human behavior
+      setInterval(checkHumanBehavior, 1000);
 
       // Handle redirects
       if (!hash) {
